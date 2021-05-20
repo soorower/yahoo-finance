@@ -1,11 +1,9 @@
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup as bs
 import time
 import sys
 import datetime
 
-#    python yahoo_historical_update.py 01-01-2021 19-05-2021
+#    python yahoo_historical_update.py 01-01-2015 19-05-2021    >It will work on any date range<
 
 startTime = time.time()
 symbols = pd.read_csv('Symbols.csv')['Symbol'].tolist()
@@ -20,12 +18,11 @@ for date in date_generated:
     my_dates.append('20'+ str(date.strftime("%y-%m-%d")))
 my_dates.append(en[-4:]+en[2:6]+en[:2])
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.72 Safari/537.36'}
-re = requests.get('https://www.unixtimestamp.com/index.php',headers=headers)
-soup = bs(re.content,'html.parser')
 
-period_2 = soup.find('div',attrs={'class':'value epoch'}).text.strip()
-
+date_time = st
+pattern = '%d-%m-%Y'
+period_1 = str(time.mktime(time.strptime(date_time, pattern))).split('.')[0]
+period_2 = str(time.time()).split('.')[0]
 lists = []
 data = {}
 counter = 1
@@ -36,7 +33,7 @@ for symbol in symbols:
     counter = counter + 1
     CMP = symbol
     print(CMP)
-    links = "https://query1.finance.yahoo.com/v7/finance/download/"+ CMP + "?period1=1589846400&period2="+ period_2 + "&interval=1d&events=history&includeAdjustedClose=true"
+    links = "https://query1.finance.yahoo.com/v7/finance/download/"+ CMP + "?period1="+ period_1 + "&period2="+ period_2 + "&interval=1d&events=history&includeAdjustedClose=true"
     try:
         df = pd.read_csv(links)
         dates = df['Date'].tolist()
